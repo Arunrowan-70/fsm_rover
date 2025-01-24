@@ -10,5 +10,6 @@ without vs solution:
 4. open unitTests, run the unitTests.exe to test execution
 -----------------------------------------
 
-![image](https://github.com/user-attachments/assets/51083452-88d8-4dc4-82ba-ace2be34109a)
+<img width="371" alt="Untitled picture" src="https://github.com/user-attachments/assets/e4754e97-34e7-4000-8781-48a93c698c05" />
+
 
