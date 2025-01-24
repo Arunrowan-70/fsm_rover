@@ -6,7 +6,7 @@
 #include <string>
 #include <array>
 #include<vector>
-
+#include <unordered_map>
 
 class LEDController{
     public:
@@ -52,9 +52,9 @@ class LEDController{
 };
 
 
-class Terminal{
+class Display_Terminal{
     public:
-        Terminal(std::string fr, std::string sr="", std::string tr="")
+        Display_Terminal(std::string fr, std::string sr="", std::string tr="")
         :_firstRow(std::move(fr)), _secondRow(std::move(sr)), _thirdRow(std::move(tr))
         {}
 
@@ -77,7 +77,7 @@ class Terminal{
         std::string getRows()const{
             std::stringstream stm;
             stm<<_firstRow<<","<<_secondRow<<","<<_thirdRow;
-            return stm.str;
+            return stm.str();
         }
 
     private:
@@ -95,7 +95,14 @@ class Wheels{
            ERROR 
         };
 
+    void setmoving(){
+        _wstatus = wheelstatus::MOVING;
+    }
+    void setNotmoving(){
+        _wstatus = wheelstatus::MOVING;
+    }
     Wheels(): _wstatus(wheelstatus::IDLE), _speed(0)
+
     {}
     private:
         wheelstatus _wstatus{wheelstatus::IDLE};
@@ -115,7 +122,7 @@ class Diagnostics{
 
     private:
         std::vector<std::string> logs;
-}
+};
 
 class SensorManager{
     public:
@@ -136,7 +143,7 @@ class SensorManager{
     private:
         std::unordered_map<std::string, SensorStatus> sensors;
     
-}
+};
 
 //EVENTS
 
@@ -154,8 +161,8 @@ struct obstacle
 };
 struct lowpower{};
 struct push_to_sleep{};
-
-
+struct Timeout{};
+struct Destination_reached{};
 //STATES
 
 enum class States{
@@ -164,6 +171,8 @@ enum class States{
     PlanTrajectory,
     Moving,
     Pause,
+    Failed,
+    Success,
     Low_Power_Mode,
     Sleep
 };
