@@ -10,4 +10,5 @@ without vs solution:
 4. open unitTests, run the unitTests.exe to test execution
 -----------------------------------------
 
-![rover](https://github.com/user-attachments/assets/539da9ad-57a4-47f5-8b50-6c4ba3bfea7c)
+![image](https://github.com/user-attachments/assets/51083452-88d8-4dc4-82ba-ace2be34109a)
+
