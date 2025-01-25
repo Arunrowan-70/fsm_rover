@@ -24,6 +24,22 @@
                 return _dt;
             }
 
+            const Wheels& getwstatus() const {
+                return _wstatus;
+            }
+
+            const SensorManager& getsmStatus() const {
+                return _sm;
+            }
+
+            const pre_conditions_met& checkpre_conditions() const{
+                return _pre_conditions;
+            }
+
+            const path_estimation& check_trajplanner() const {
+                return _traj_planner;
+            }
+
 
             private:
             void start_rover();
@@ -48,6 +64,8 @@
                 int _retryCounts{0};
                 pre_conditions_met _pre_conditions;
                 path_estimation _traj_planner;
+
+                bool rover_stopped{false};
             
         };
 
@@ -75,7 +93,7 @@
             switch (_state)
             {
             case States::Prepare:          
-                if(event.pre_condtions)
+                if(_pre_conditions.pre_condtions)
                     transitionToPlanTrajectory();
                 break;
             
@@ -89,7 +107,7 @@
             switch (_state)
             {
             case States::PlanTrajectory:          
-                if(event.traj_planned)
+                if(_traj_planner.traj_planned)
                     transitionToManeuvering();
                 break;
             
@@ -105,6 +123,11 @@
             case States::Moving:
                 transitionToPause();
                 break;
+
+            case States::Pause:
+                if(rover_stopped)
+                    transitionToPrepare();
+                    break;
             
             default:
                 break;
@@ -120,9 +143,6 @@
                 if(_retryCounts > 2)
                 {
                     transitionToFailed();
-                }
-                else{
-                    transitionToPrepare();
                 }
                 
                 break;
@@ -158,6 +178,11 @@
 
         inline void FSM::transitionToPrepare(){
             _state=States::Prepare;
+            if(rover_stopped){
+                _dt.setRows("RE_PREPARATION","SENSORS_ALREADY_ACTIAVTED", "REPLAN_TRAJECTORY");
+                rover_stopped=false;
+                return;
+            }
             _sm.addSensor("camera");
             _sm.addSensor("ultrasonic");
             _sm.addSensor("radar");
@@ -188,6 +213,7 @@
             _state=States::Pause;
             _wstatus.setNotmoving();
             _dt.setRows("PAUSE");
+            rover_stopped=true;
         }
 
         inline void FSM::transitionToFailed(){
@@ -200,6 +226,7 @@
 
         inline void FSM::transitionToSuccess(){
             _state=States::Success;
+            _wstatus.setNotmoving();
             _dt.setRows("REACHED_THE_DESTINATION");
         }
 
@@ -218,7 +245,7 @@
             _sm.deactivateSensor("camera");
             _sm.deactivateSensor("ultrasonic");
             _sm.deactivateSensor("radar");
-            _dt.setRows("SLEEP MODE", "ALL SYSTEMS OFF");
+            _dt.setRows("SLEEP_MODE", "ALL_SYSTEMS_OFF","ZZZZZZZ");
         }
 
 

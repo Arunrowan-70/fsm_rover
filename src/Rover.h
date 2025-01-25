@@ -6,7 +6,7 @@
 #include <string>
 #include <array>
 #include<vector>
-
+#include<unordered_map>
 
 class LEDController{
     public:
@@ -99,7 +99,10 @@ class Wheels{
         _wstatus = wheelstatus::MOVING;
     }
     void setNotmoving(){
-        _wstatus = wheelstatus::MOVING;
+        _wstatus = wheelstatus::IDLE;
+    }
+    wheelstatus get_wheelStatus() const{
+        return _wstatus;
     }
     Wheels(): _wstatus(wheelstatus::IDLE), _speed(0)
 
@@ -129,7 +132,8 @@ class SensorManager{
     enum class SensorStatus {
         ACTIVE,
         IDLE,
-        ERROR
+        ERROR,
+        NO_SENSORS
     };
 
     void addSensor(const std::string& sensorName);

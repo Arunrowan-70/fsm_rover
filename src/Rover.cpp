@@ -24,6 +24,6 @@ SensorManager::SensorStatus SensorManager::getSensorStatus(const std::string& se
     if (sensors.find(sensorName) != sensors.end()) {
         return sensors.at(sensorName);
     }
-    return SensorStatus::ERROR;
+    return SensorStatus::NO_SENSORS;
 }
 
