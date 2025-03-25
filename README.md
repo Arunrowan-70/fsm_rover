@@ -1,9 +1,10 @@
 run command:
 1. cmake -G "Visual Studio 17 2022" -B build
-2. cd build
-3. run FSM.sln
+2. cmake --build build --config Release
+3. cd build
+4. RoverFSM.sln
 -----------------------------------------
-without vs solution:
+without visual studio solution:
 1. mkdir build, cd build
 2. cmake ..
 3. cmake --build .
