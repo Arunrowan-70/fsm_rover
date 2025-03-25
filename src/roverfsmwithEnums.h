@@ -1,6 +1,5 @@
     #include "Rover.h"
     #include <array>
-
     namespace with_enums{
         class FSM{
             public: 
@@ -12,6 +11,7 @@
                 FSM & process(Destination_reached event);
                 FSM & process(lowpower event);
                 FSM & process(push_to_sleep event);
+                void reset();
 
             States getState() const{
                 return _state;
@@ -39,8 +39,7 @@
             const path_estimation& check_trajplanner() const {
                 return _traj_planner;
             }
-
-
+            
             private:
             void start_rover();
 
@@ -52,6 +51,7 @@
             void transitionToSuccess();
             void transitionToLowPowerMode();
             void transitionToSleep();
+            
 
                 States _state { States::Idle};
 
@@ -68,6 +68,18 @@
                 bool rover_stopped{false};
             
         };
+        inline void FSM::reset() {
+            _state = States::Idle;  
+            _retryCounts = 0;       
+            rover_stopped = false;
+            _pre_conditions.pre_condtions = false;  
+            _traj_planner.traj_planned = false;     
+            _led.turnoff();         
+            _dt.setRows("Reset to Idle");
+            _sm.deactivateSensor("camera");  
+            _sm.deactivateSensor("ultrasonic");
+            _sm.deactivateSensor("radar");
+        }
 
         inline void FSM::start_rover(){
             _led.turnon();
@@ -250,3 +262,5 @@
 
 
     };
+
+    

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.23)
 
 # Enable testing
-enable_testing()
+
 
 # Define the project name
 project(RoverFSM)
@@ -9,6 +9,20 @@ project(RoverFSM)
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 14)
 
+add_library(roverfsm SHARED
+    src/Rover.cpp
+    src/roverfsm_export.cpp
+)
+
+target_include_directories(roverfsm PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+set_target_properties(roverfsm PROPERTIES
+    OUTPUT_NAME "libroverfsm"
+)
+
+enable_testing()
 # Add source and header files for the unit tests and the RoverFSM logic
 add_executable(unitTests
     src/Rover.cpp

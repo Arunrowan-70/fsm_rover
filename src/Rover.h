@@ -150,7 +150,9 @@ class SensorManager{
 };
 
 //EVENTS
-
+struct turnon_rover{
+    bool turned_on;
+};
 struct pre_conditions_met{
     bool pre_condtions;
 };
